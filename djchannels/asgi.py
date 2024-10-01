@@ -11,6 +11,22 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djchannels.settings')
 
 application = get_asgi_application()
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+from home.consumer import *
+
+ws_pattern = [
+    path("ws/main/",WebsocketConsumer),
+]
+
+application = ProtocolTypeRouter({
+    "websocket":(
+        (
+        URLRouter(ws_pattern)
+        )
+    ),
+})
